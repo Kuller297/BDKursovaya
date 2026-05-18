@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Просмотр данных</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      
+      <widget class="QWidget" name="tabUsers">
+       <attribute name="title">
+        <string>Пользователи</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayoutUsers">
+        <item>
+         <widget class="QTableWidget" name="tableUsers">
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Логин</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Пароль</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Роль</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      
+      <widget class="QWidget" name="tabEmployees">
+       <attribute name="title">
+        <string>Сотрудники</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayoutEmployees">
+        <item>
+         <widget class="QTableWidget" name="tableEmployees">
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Имя</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Фамилия</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Отчество</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Должность</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Телефон</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Адрес</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Роль в системе</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      
+      <widget class="QWidget" name="tabComputers">
+       <attribute name="title">
+        <string>Компьютеры</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayoutComputers">
+        <item>
+         <widget class="QTableWidget" name="tableComputers">
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Процессор</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Видеокарта</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>RAM, GB</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Экран</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Клавиатура</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Мышь</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Владелец</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      
+      <widget class="QWidget" name="tabSoftware">
+       <attribute name="title">
+        <string>Программное обеспечение</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayoutSoftware">
+        <item>
+         <widget class="QTableWidget" name="tableSoftware">
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Название</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Версия</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      
+      <widget class="QWidget" name="tabLicenses">
+       <attribute name="title">
+        <string>Лицензии</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayoutLicenses">
+        <item>
+         <widget class="QTableWidget" name="tableLicenses">
+          <column>
+           <property name="text">
+            <string>ID</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Дата окончания</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Программа</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Ключ</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

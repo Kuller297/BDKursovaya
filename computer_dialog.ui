@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ComputerDialog</class>
+ <widget class="QDialog" name="ComputerDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Добавление компьютера</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelProcessor">
+       <property name="text">
+        <string>Процессор:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="editProcessor"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelVideoCard">
+       <property name="text">
+        <string>Видеокарта:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="editVideoCard"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelRam">
+       <property name="text">
+        <string>RAM, GB:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="editRam"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelScreen">
+       <property name="text">
+        <string>Экран:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="editScreen"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelKeyboard">
+       <property name="text">
+        <string>Клавиатура:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="editKeyboard"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="labelMouse">
+       <property name="text">
+        <string>Мышь:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="editMouse"/>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="labelEmpId">
+       <property name="text">
+        <string>ID сотрудника:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="editEmpId"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="btnSave">
+       <property name="text">
+        <string>Сохранить</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnCancel">
+       <property name="text">
+        <string>Отмена</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
