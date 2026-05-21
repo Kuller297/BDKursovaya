@@ -9,19 +9,13 @@ bool Database::connect()
         Database::db.close();
     }
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
 
-    QString connectionString = QString(
-        "DRIVER={PostgreSQL ODBC Driver(UNICODE)};"
-        "SERVER=localhost;"
-        "PORT=5432;"
-        "DATABASE=Kursovaya;"
-        "UID=postgres;"
-        "PWD=!oO1254Oo!;"
-        "SSLmode=disable;"
-        );
-
-    db.setDatabaseName(connectionString);
+    db.setHostName("127.0.0.1");
+    db.setPort(5432);
+    db.setDatabaseName("Kursovaya");
+    db.setUserName("postgres");
+    db.setPassword("!oO1254Oo!");
 
     if (!db.open()) {
         lastError = db.lastError().text();
