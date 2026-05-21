@@ -15,7 +15,9 @@ public:
     explicit ComputerDialog(QWidget *parent = nullptr);
     ~ComputerDialog();
 
-    void setEditMode(int compId, const QString& processor, const QString& video_card,int ram, const QString& screen, const QString& keyboard,const QString& mouse, int id_emp);
+    void setEditMode(int compId, const QString& processor, const QString& video_card,
+                     int ram, const QString& screen, const QString& keyboard,
+                     const QString& mouse, int id_emp, const QString& employeeName);
     void setAddMode();
 
     int getCompId() const;
@@ -30,10 +32,14 @@ public:
 private slots:
     void onSaveClicked();
     void onCancelClicked();
+    void onSelectEmployee();
+    void onClearEmployee();
 
 private:
     Ui::ComputerDialog *ui;
     int currentCompId;
+    int selectedEmpId;
+    QString selectedEmployeeName;
     bool isEditMode;
 };
 

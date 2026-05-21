@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -38,8 +39,12 @@ public:
     QLineEdit *editTelephone;
     QLabel *labelAdress;
     QLineEdit *editAdress;
-    QLabel *labelUserId;
-    QLineEdit *editUserId;
+    QLabel *labelLogin;
+    QLineEdit *editLogin;
+    QLabel *labelPassword;
+    QLineEdit *editPassword;
+    QLabel *labelRole;
+    QComboBox *comboRole;
     QHBoxLayout *horizontalLayout;
     QPushButton *btnSave;
     QPushButton *btnCancel;
@@ -48,7 +53,7 @@ public:
     {
         if (EmployeeDialog->objectName().isEmpty())
             EmployeeDialog->setObjectName("EmployeeDialog");
-        EmployeeDialog->resize(450, 400);
+        EmployeeDialog->resize(450, 500);
         verticalLayout = new QVBoxLayout(EmployeeDialog);
         verticalLayout->setObjectName("verticalLayout");
         formLayout = new QFormLayout();
@@ -113,15 +118,39 @@ public:
 
         formLayout->setWidget(5, QFormLayout::ItemRole::FieldRole, editAdress);
 
-        labelUserId = new QLabel(EmployeeDialog);
-        labelUserId->setObjectName("labelUserId");
+        labelLogin = new QLabel(EmployeeDialog);
+        labelLogin->setObjectName("labelLogin");
 
-        formLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, labelUserId);
+        formLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, labelLogin);
 
-        editUserId = new QLineEdit(EmployeeDialog);
-        editUserId->setObjectName("editUserId");
+        editLogin = new QLineEdit(EmployeeDialog);
+        editLogin->setObjectName("editLogin");
 
-        formLayout->setWidget(6, QFormLayout::ItemRole::FieldRole, editUserId);
+        formLayout->setWidget(6, QFormLayout::ItemRole::FieldRole, editLogin);
+
+        labelPassword = new QLabel(EmployeeDialog);
+        labelPassword->setObjectName("labelPassword");
+
+        formLayout->setWidget(7, QFormLayout::ItemRole::LabelRole, labelPassword);
+
+        editPassword = new QLineEdit(EmployeeDialog);
+        editPassword->setObjectName("editPassword");
+        editPassword->setEchoMode(QLineEdit::Password);
+
+        formLayout->setWidget(7, QFormLayout::ItemRole::FieldRole, editPassword);
+
+        labelRole = new QLabel(EmployeeDialog);
+        labelRole->setObjectName("labelRole");
+
+        formLayout->setWidget(8, QFormLayout::ItemRole::LabelRole, labelRole);
+
+        comboRole = new QComboBox(EmployeeDialog);
+        comboRole->addItem(QString());
+        comboRole->addItem(QString());
+        comboRole->addItem(QString());
+        comboRole->setObjectName("comboRole");
+
+        formLayout->setWidget(8, QFormLayout::ItemRole::FieldRole, comboRole);
 
 
         verticalLayout->addLayout(formLayout);
@@ -156,7 +185,13 @@ public:
         labelPost->setText(QCoreApplication::translate("EmployeeDialog", "\320\224\320\276\320\273\320\266\320\275\320\276\321\201\321\202\321\214:", nullptr));
         labelTelephone->setText(QCoreApplication::translate("EmployeeDialog", "\320\242\320\265\320\273\320\265\321\204\320\276\320\275:", nullptr));
         labelAdress->setText(QCoreApplication::translate("EmployeeDialog", "\320\220\320\264\321\200\320\265\321\201:", nullptr));
-        labelUserId->setText(QCoreApplication::translate("EmployeeDialog", "ID \320\277\320\276\320\273\321\214\320\267\320\276\320\262\320\260\321\202\320\265\320\273\321\217:", nullptr));
+        labelLogin->setText(QCoreApplication::translate("EmployeeDialog", "\320\233\320\276\320\263\320\270\320\275:", nullptr));
+        labelPassword->setText(QCoreApplication::translate("EmployeeDialog", "\320\237\320\260\321\200\320\276\320\273\321\214:", nullptr));
+        labelRole->setText(QCoreApplication::translate("EmployeeDialog", "\320\240\320\276\320\273\321\214 \320\262 \321\201\320\270\321\201\321\202\320\265\320\274\320\265:", nullptr));
+        comboRole->setItemText(0, QCoreApplication::translate("EmployeeDialog", "user", nullptr));
+        comboRole->setItemText(1, QCoreApplication::translate("EmployeeDialog", "admin", nullptr));
+        comboRole->setItemText(2, QCoreApplication::translate("EmployeeDialog", "main_admin", nullptr));
+
         btnSave->setText(QCoreApplication::translate("EmployeeDialog", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         btnCancel->setText(QCoreApplication::translate("EmployeeDialog", "\320\236\321\202\320\274\320\265\320\275\320\260", nullptr));
     } // retranslateUi

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>400</height>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,14 +77,54 @@
       <widget class="QLineEdit" name="editAdress"/>
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="labelUserId">
+      <widget class="QLabel" name="labelLogin">
        <property name="text">
-        <string>ID пользователя:</string>
+        <string>Логин:</string>
        </property>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QLineEdit" name="editUserId"/>
+      <widget class="QLineEdit" name="editLogin"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="labelPassword">
+       <property name="text">
+        <string>Пароль:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="editPassword">
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="labelRole">
+       <property name="text">
+        <string>Роль в системе:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QComboBox" name="comboRole">
+       <item>
+        <property name="text">
+         <string>user</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>admin</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>main_admin</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>

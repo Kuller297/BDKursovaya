@@ -1,16 +1,20 @@
 #include "computer_dialog.h"
 #include "ui_computer_dialog.h"
+#include "employee_search_dialog.h"
 
 ComputerDialog::ComputerDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ComputerDialog)
     , currentCompId(-1)
+    , selectedEmpId(-1)
     , isEditMode(false)
 {
     ui->setupUi(this);
 
     connect(ui->btnSave, &QPushButton::clicked, this, &ComputerDialog::onSaveClicked);
     connect(ui->btnCancel, &QPushButton::clicked, this, &ComputerDialog::onCancelClicked);
+    connect(ui->btnSelectEmployee, &QPushButton::clicked, this, &ComputerDialog::onSelectEmployee);
+    connect(ui->btnClearEmployee, &QPushButton::clicked, this, &ComputerDialog::onClearEmployee);
 }
 
 ComputerDialog::~ComputerDialog()
@@ -18,10 +22,14 @@ ComputerDialog::~ComputerDialog()
     delete ui;
 }
 
-void ComputerDialog::setEditMode(int compId, const QString& processor, const QString& video_card,int ram, const QString& screen, const QString& keyboard,const QString& mouse, int id_emp)
+void ComputerDialog::setEditMode(int compId, const QString& processor, const QString& video_card,
+                                 int ram, const QString& screen, const QString& keyboard,
+                                 const QString& mouse, int id_emp, const QString& employeeName)
 {
     isEditMode = true;
     currentCompId = compId;
+    selectedEmpId = id_emp;
+    selectedEmployeeName = employeeName;
     setWindowTitle("Редактирование компьютера");
 
     ui->editProcessor->setText(processor);
@@ -30,13 +38,15 @@ void ComputerDialog::setEditMode(int compId, const QString& processor, const QSt
     ui->editScreen->setText(screen);
     ui->editKeyboard->setText(keyboard);
     ui->editMouse->setText(mouse);
-    ui->editEmpId->setText(id_emp == -1 ? "" : QString::number(id_emp));
+    ui->editEmployeeFullName->setText(employeeName);
 }
 
 void ComputerDialog::setAddMode()
 {
     isEditMode = false;
     currentCompId = -1;
+    selectedEmpId = -1;
+    selectedEmployeeName.clear();
     setWindowTitle("Добавление компьютера");
 
     ui->editProcessor->clear();
@@ -45,7 +55,7 @@ void ComputerDialog::setAddMode()
     ui->editScreen->clear();
     ui->editKeyboard->clear();
     ui->editMouse->clear();
-    ui->editEmpId->clear();
+    ui->editEmployeeFullName->clear();
 }
 
 int ComputerDialog::getCompId() const
@@ -85,7 +95,24 @@ QString ComputerDialog::getMouse() const
 
 int ComputerDialog::getEmpId() const
 {
-    return ui->editEmpId->text().isEmpty() ? -1 : ui->editEmpId->text().toInt();
+    return selectedEmpId;
+}
+
+void ComputerDialog::onSelectEmployee()
+{
+    EmployeeSearchDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        selectedEmpId = dialog.getSelectedId();
+        selectedEmployeeName = dialog.getSelectedFullName();
+        ui->editEmployeeFullName->setText(selectedEmployeeName);
+    }
+}
+
+void ComputerDialog::onClearEmployee()
+{
+    selectedEmpId = -1;
+    selectedEmployeeName.clear();
+    ui->editEmployeeFullName->clear();
 }
 
 void ComputerDialog::onSaveClicked()

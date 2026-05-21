@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>250</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,23 +31,33 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="labelIdSoft">
+      <widget class="QLabel" name="labelSoftName">
        <property name="text">
-        <string>ID ПО:</string>
+        <string>Название ПО:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="editIdSoft"/>
+      <widget class="QLineEdit" name="editSoftName"/>
      </item>
      <item row="2" column="0">
+      <widget class="QLabel" name="labelSoftVersion">
+       <property name="text">
+        <string>Версия ПО:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="editSoftVersion"/>
+     </item>
+     <item row="3" column="0">
       <widget class="QLabel" name="labelKey">
        <property name="text">
         <string>Ключ:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="editKey"/>
      </item>
     </layout>

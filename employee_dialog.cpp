@@ -20,7 +20,8 @@ EmployeeDialog::~EmployeeDialog()
 
 void EmployeeDialog::setEditMode(int empId, const QString& name, const QString& surname,
                                  const QString& patronimic, const QString& post,
-                                 const QString& telephone, const QString& adress, int userId)
+                                 const QString& telephone, const QString& adress,
+                                 const QString& login, const QString& password, const QString& role)
 {
     isEditMode = true;
     currentEmpId = empId;
@@ -32,7 +33,9 @@ void EmployeeDialog::setEditMode(int empId, const QString& name, const QString& 
     ui->editPost->setText(post);
     ui->editTelephone->setText(telephone);
     ui->editAdress->setText(adress);
-    ui->editUserId->setText(userId == -1 ? "" : QString::number(userId));
+    ui->editLogin->setText(login);
+    ui->editPassword->setText(password);
+    ui->comboRole->setCurrentText(role);
 }
 
 void EmployeeDialog::setAddMode()
@@ -47,7 +50,9 @@ void EmployeeDialog::setAddMode()
     ui->editPost->clear();
     ui->editTelephone->clear();
     ui->editAdress->clear();
-    ui->editUserId->clear();
+    ui->editLogin->clear();
+    ui->editPassword->clear();
+    ui->comboRole->setCurrentIndex(0);
 }
 
 int EmployeeDialog::getEmpId() const
@@ -85,14 +90,27 @@ QString EmployeeDialog::getAdress() const
     return ui->editAdress->text().trimmed();
 }
 
-int EmployeeDialog::getUserId() const
+QString EmployeeDialog::getLogin() const
 {
-    return ui->editUserId->text().isEmpty() ? -1 : ui->editUserId->text().toInt();
+    return ui->editLogin->text().trimmed();
+}
+
+QString EmployeeDialog::getPassword() const
+{
+    return ui->editPassword->text();
+}
+
+QString EmployeeDialog::getRole() const
+{
+    return ui->comboRole->currentText();
 }
 
 void EmployeeDialog::onSaveClicked()
 {
     if (getName().isEmpty() || getSurname().isEmpty()) {
+        return;
+    }
+    if (!isEditMode && (getLogin().isEmpty() || getPassword().isEmpty())) {
         return;
     }
     accept();

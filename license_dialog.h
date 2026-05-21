@@ -15,13 +15,16 @@ public:
     explicit LicenseDialog(QWidget *parent = nullptr);
     ~LicenseDialog();
 
-    void setEditMode(int licId, const QString& end_date, int id_soft, const QString& key);
+    void setEditMode(int licId, const QString& end_date, const QString& soft_name,
+                     const QString& soft_version, const QString& key);
     void setAddMode();
 
     int getLicId() const;
     QString getEndDate() const;
-    int getIdSoft() const;
+    QString getSoftName() const;
+    QString getSoftVersion() const;
     QString getKey() const;
+    int getSoftId();
 
 private slots:
     void onSaveClicked();
@@ -29,6 +32,7 @@ private slots:
 
 private:
     bool validateDate(const QString& date);
+    int findSoftwareId(const QString& name, const QString& version);
 
     Ui::LicenseDialog *ui;
     int currentLicId;

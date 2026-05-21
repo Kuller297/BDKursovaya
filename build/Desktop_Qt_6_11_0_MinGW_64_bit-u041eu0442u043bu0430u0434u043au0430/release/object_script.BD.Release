@@ -1,5 +1,6 @@
 release/computer_dialog.o
 release/employee_dialog.o
+release/employee_search_dialog.o
 release/license_dialog.o
 release/main.o
 release/database.o
@@ -7,12 +8,11 @@ release/loginwindow.o
 release/mainwindow.o
 release/searchdialog.o
 release/software_dialog.o
-release/userdialog.o
 release/moc_computer_dialog.o
 release/moc_employee_dialog.o
+release/moc_employee_search_dialog.o
 release/moc_license_dialog.o
 release/moc_loginwindow.o
 release/moc_mainwindow.o
 release/moc_searchdialog.o
 release/moc_software_dialog.o
-release/moc_userdialog.o

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>400</height>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,14 +77,39 @@
       <widget class="QLineEdit" name="editMouse"/>
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="labelEmpId">
+      <widget class="QLabel" name="labelEmployee">
        <property name="text">
-        <string>ID сотрудника:</string>
+        <string>Сотрудник:</string>
        </property>
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="QLineEdit" name="editEmpId"/>
+      <layout class="QHBoxLayout" name="employeeLayout">
+       <item>
+        <widget class="QLineEdit" name="editEmployeeFullName">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="placeholderText">
+          <string>Сотрудник не выбран</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnSelectEmployee">
+         <property name="text">
+          <string>Выбрать</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnClearEmployee">
+         <property name="text">
+          <string>Очистить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

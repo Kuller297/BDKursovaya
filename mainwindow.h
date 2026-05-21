@@ -24,9 +24,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private slots:
-    void onAddUser();
-    void onEditUser();
-    void onDeleteUser();
     void onSearchUsers();
 
     void onAddEmployee();

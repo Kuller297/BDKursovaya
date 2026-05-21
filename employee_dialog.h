@@ -1,5 +1,5 @@
-#ifndef EMPLOYEEDIALOG_H
-#define EMPLOYEEDIALOG_H
+#ifndef EMPLOYEE_DIALOG_H
+#define EMPLOYEE_DIALOG_H
 
 #include <QDialog>
 
@@ -15,7 +15,10 @@ public:
     explicit EmployeeDialog(QWidget *parent = nullptr);
     ~EmployeeDialog();
 
-    void setEditMode(int empId, const QString& name, const QString& surname,const QString& patronimic, const QString& post,const QString& telephone, const QString& adress, int userId);
+    void setEditMode(int empId, const QString& name, const QString& surname,
+                     const QString& patronimic, const QString& post,
+                     const QString& telephone, const QString& adress,
+                     const QString& login, const QString& password, const QString& role);
     void setAddMode();
 
     int getEmpId() const;
@@ -25,7 +28,9 @@ public:
     QString getPost() const;
     QString getTelephone() const;
     QString getAdress() const;
-    int getUserId() const;
+    QString getLogin() const;
+    QString getPassword() const;
+    QString getRole() const;
 
 private slots:
     void onSaveClicked();
@@ -37,4 +42,4 @@ private:
     bool isEditMode;
 };
 
-#endif // EMPLOYEEDIALOG_H
+#endif // EMPLOYEE_DIALOG_H

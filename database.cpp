@@ -74,11 +74,11 @@ QSqlQuery Database::getAllUsers()
         return query;
     }
 
-    query.exec("SELECT user_id, login, password, user_post FROM \"user\" ORDER BY user_id");
+    query.exec("SELECT user_id, login, password, user_post, surname FROM \"user\" ORDER BY user_id");
     return query;
 }
 
-bool Database::addUser(const QString& login, const QString& password, const QString& user_post)
+bool Database::addUser(const QString& login, const QString& password, const QString& user_post, const QString& surname)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -86,10 +86,11 @@ bool Database::addUser(const QString& login, const QString& password, const QStr
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("INSERT INTO \"user\" (login, password, user_post) VALUES (?, ?, ?)");
+    query.prepare("INSERT INTO \"user\" (login, password, user_post, surname) VALUES (?, ?, ?, ?)");
     query.addBindValue(login);
     query.addBindValue(password);
     query.addBindValue(user_post);
+    query.addBindValue(surname);
 
     if (!query.exec()) {
         lastError = query.lastError().text();
@@ -98,7 +99,7 @@ bool Database::addUser(const QString& login, const QString& password, const QStr
     return true;
 }
 
-bool Database::updateUser(int user_id, const QString& login, const QString& password, const QString& user_post)
+bool Database::updateUser(int user_id, const QString& login, const QString& password, const QString& user_post, const QString& surname)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -106,10 +107,11 @@ bool Database::updateUser(int user_id, const QString& login, const QString& pass
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("UPDATE \"user\" SET login = ?, password = ?, user_post = ? WHERE user_id = ?");
+    query.prepare("UPDATE \"user\" SET login = ?, password = ?, user_post = ?, surname = ? WHERE user_id = ?");
     query.addBindValue(login);
     query.addBindValue(password);
     query.addBindValue(user_post);
+    query.addBindValue(surname);
     query.addBindValue(user_id);
 
     if (!query.exec()) {
@@ -143,13 +145,14 @@ QSqlQuery Database::getAllEmployees()
     if (!Database::db.isOpen()) {
         return query;
     }
+
     query.exec("SELECT e.id_emp, e.name, e.surname, e.patronimic, e.post, e.telephone, e.adress, "
                "COALESCE(u.user_post, 'Не назначен') FROM employee e "
                "LEFT JOIN \"user\" u ON e.user_id = u.user_id ORDER BY e.id_emp");
     return query;
 }
 
-bool Database::addEmployee(const QString& name, const QString& surname, const QString& patronimic,const QString& post, const QString& telephone, const QString& adress, int user_id)
+bool Database::addEmployee(const QString& name, const QString& surname, const QString& patronimic,const QString& post, const QString& telephone, const QString& adress,const QString& login, const QString& password, const QString& role)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -157,28 +160,49 @@ bool Database::addEmployee(const QString& name, const QString& surname, const QS
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("INSERT INTO employee (name, surname, patronimic, post, telephone, adress, user_id) " "VALUES (?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(name);
-    query.addBindValue(surname);
-    query.addBindValue(patronimic);
-    query.addBindValue(post);
-    query.addBindValue(telephone);
-    query.addBindValue(adress);
-    if (user_id == -1) {
-        query.addBindValue(QVariant());
-    } else {
-        query.addBindValue(user_id);
+
+    query.prepare("SELECT user_id FROM \"user\" WHERE login = ?");
+    query.addBindValue(login);
+    if (query.exec() && query.next()) {
+        lastError = "Пользователь с таким логином уже существует";
+        return false;
     }
+
+    query.prepare("INSERT INTO \"user\" (login, password, user_post, surname) VALUES (?, ?, ?, ?) RETURNING user_id");
+    query.addBindValue(login);
+    query.addBindValue(password);
+    query.addBindValue(role);
+    query.addBindValue(surname);
 
     if (!query.exec()) {
         lastError = query.lastError().text();
         return false;
     }
+
+    int userId = -1;
+    if (query.next()) {
+        userId = query.value(0).toInt();
+    }
+
+    query.prepare("INSERT INTO employee (name, surname, patronimic, post, telephone, adress, user_id) "
+                  "VALUES (?, ?, ?, ?, ?, ?, ?)");
+    query.addBindValue(name);
+    query.addBindValue(surname);
+    query.addBindValue(patronimic);
+    query.addBindValue(post);
+    query.addBindValue(telephone);
+    query.addBindValue(adress);
+    query.addBindValue(userId);
+
+    if (!query.exec()) {
+        lastError = query.lastError().text();
+        return false;
+    }
+
     return true;
 }
 
-bool Database::updateEmployee(int id_emp, const QString& name, const QString& surname, const QString& patronimic,
-                              const QString& post, const QString& telephone, const QString& adress, int user_id)
+bool Database::updateEmployee(int id_emp, const QString& name, const QString& surname, const QString& patronimic,const QString& post, const QString& telephone, const QString& adress,const QString& login, const QString& password, const QString& role)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -186,25 +210,49 @@ bool Database::updateEmployee(int id_emp, const QString& name, const QString& su
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("UPDATE employee SET name = ?, surname = ?, patronimic = ?, post = ?, "
-                  "telephone = ?, adress = ?, user_id = ? WHERE id_emp = ?");
-    query.addBindValue(name);
-    query.addBindValue(surname);
-    query.addBindValue(patronimic);
-    query.addBindValue(post);
-    query.addBindValue(telephone);
-    query.addBindValue(adress);
-    if (user_id == -1) {
-        query.addBindValue(QVariant());
-    } else {
-        query.addBindValue(user_id);
-    }
+
+    query.prepare("SELECT user_id FROM employee WHERE id_emp = ?");
     query.addBindValue(id_emp);
 
     if (!query.exec()) {
         lastError = query.lastError().text();
         return false;
     }
+
+    int userId = -1;
+    if (query.next()) {
+        userId = query.value(0).toInt();
+    }
+
+    if (userId != -1) {
+        query.prepare("UPDATE \"user\" SET login = ?, password = ?, user_post = ?, surname = ? WHERE user_id = ?");
+        query.addBindValue(login);
+        query.addBindValue(password);
+        query.addBindValue(role);
+        query.addBindValue(surname);
+        query.addBindValue(userId);
+
+        if (!query.exec()) {
+            lastError = query.lastError().text();
+            return false;
+        }
+    }
+
+    query.prepare("UPDATE employee SET name = ?, surname = ?, patronimic = ?, post = ?, "
+                  "telephone = ?, adress = ? WHERE id_emp = ?");
+    query.addBindValue(name);
+    query.addBindValue(surname);
+    query.addBindValue(patronimic);
+    query.addBindValue(post);
+    query.addBindValue(telephone);
+    query.addBindValue(adress);
+    query.addBindValue(id_emp);
+
+    if (!query.exec()) {
+        lastError = query.lastError().text();
+        return false;
+    }
+
     return true;
 }
 
@@ -214,8 +262,20 @@ bool Database::deleteEmployee(int id_emp)
         lastError = "Нет подключения к базе данных";
         return false;
     }
-
     QSqlQuery query(Database::db);
+    query.prepare("SELECT user_id FROM employee WHERE id_emp = ?");
+    query.addBindValue(id_emp);
+
+    if (!query.exec()) {
+        lastError = query.lastError().text();
+        return false;
+    }
+
+    int userId = -1;
+    if (query.next()) {
+        userId = query.value(0).toInt();
+    }
+
     query.prepare("DELETE FROM employee WHERE id_emp = ?");
     query.addBindValue(id_emp);
 
@@ -223,6 +283,17 @@ bool Database::deleteEmployee(int id_emp)
         lastError = query.lastError().text();
         return false;
     }
+
+    if (userId != -1) {
+        query.prepare("DELETE FROM \"user\" WHERE user_id = ?");
+        query.addBindValue(userId);
+
+        if (!query.exec()) {
+            lastError = query.lastError().text();
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -232,14 +303,12 @@ QSqlQuery Database::getAllComputers()
     if (!Database::db.isOpen()) {
         return query;
     }
-    query.exec("SELECT c.id_comp, c.processor, c.video_card, c.\"RAM, gb\", c.screen, c.keyboard, c.mouse, "
-               "COALESCE(e.surname, 'Не назначен') FROM computer c "
-               "LEFT JOIN employee e ON c.id_emp = e.id_emp ORDER BY c.id_comp");
+
+    query.exec("SELECT c.id_comp, c.processor, c.video_card, c.\"RAM, gb\", c.screen, c.keyboard, c.mouse, ""COALESCE(e.surname, 'Не назначен') FROM computer c ""LEFT JOIN employee e ON c.id_emp = e.id_emp ORDER BY c.id_comp");
     return query;
 }
 
-bool Database::addComputer(const QString& processor, const QString& video_card, int ram,
-                           const QString& screen, const QString& keyboard, const QString& mouse, int id_emp)
+bool Database::addComputer(const QString& processor, const QString& video_card, int ram,const QString& screen, const QString& keyboard, const QString& mouse, int id_emp)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -247,8 +316,7 @@ bool Database::addComputer(const QString& processor, const QString& video_card, 
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("INSERT INTO computer (processor, video_card, \"RAM, gb\", screen, keyboard, mouse, id_emp) "
-                  "VALUES (?, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO computer (processor, video_card, \"RAM, gb\", screen, keyboard, mouse, id_emp) ""VALUES (?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(processor);
     query.addBindValue(video_card);
     query.addBindValue(ram);
@@ -268,8 +336,7 @@ bool Database::addComputer(const QString& processor, const QString& video_card, 
     return true;
 }
 
-bool Database::updateComputer(int id_comp, const QString& processor, const QString& video_card, int ram,
-                              const QString& screen, const QString& keyboard, const QString& mouse, int id_emp)
+bool Database::updateComputer(int id_comp, const QString& processor, const QString& video_card, int ram,const QString& screen, const QString& keyboard, const QString& mouse, int id_emp)
 {
     if (!Database::db.isOpen()) {
         lastError = "Нет подключения к базе данных";
@@ -277,8 +344,7 @@ bool Database::updateComputer(int id_comp, const QString& processor, const QStri
     }
 
     QSqlQuery query(Database::db);
-    query.prepare("UPDATE computer SET processor = ?, video_card = ?, \"RAM, gb\" = ?, "
-                  "screen = ?, keyboard = ?, mouse = ?, id_emp = ? WHERE id_comp = ?");
+    query.prepare("UPDATE computer SET processor = ?, video_card = ?, \"RAM, gb\" = ?, ""screen = ?, keyboard = ?, mouse = ?, id_emp = ? WHERE id_comp = ?");
     query.addBindValue(processor);
     query.addBindValue(video_card);
     query.addBindValue(ram);
@@ -391,6 +457,7 @@ QSqlQuery Database::getAllLicenses()
     if (!Database::db.isOpen()) {
         return query;
     }
+
     query.exec("SELECT l.id_lic, l.end_date, COALESCE(s.soft_name, 'Не указано'), l.key FROM license l "
                "LEFT JOIN software s ON l.id_soft = s.id_soft ORDER BY l.id_lic");
     return query;
@@ -455,81 +522,28 @@ bool Database::deleteLicense(int id_lic)
     return true;
 }
 
-QSqlQuery Database::getSoftwareForComputer(int id_comp)
+QSqlQuery Database::getEmployeeByUserId(int id_emp)
 {
     QSqlQuery query(Database::db);
     if (!Database::db.isOpen()) {
         return query;
     }
 
-    query.prepare("SELECT s.id_soft, s.soft_name, s.version FROM software s "
-                  "JOIN computer_software cs ON s.id_soft = cs.id_soft "
-                  "WHERE cs.id_comp = ?");
-    query.addBindValue(id_comp);
-    query.exec();
-    return query;
-}
-
-bool Database::addSoftwareToComputer(int id_comp, int id_soft)
-{
-    if (!Database::db.isOpen()) {
-        lastError = "Нет подключения к базе данных";
-        return false;
-    }
-
-    QSqlQuery query(Database::db);
-    query.prepare("INSERT INTO computer_software (id_comp, id_soft) VALUES (?, ?)");
-    query.addBindValue(id_comp);
-    query.addBindValue(id_soft);
-
-    if (!query.exec()) {
-        lastError = query.lastError().text();
-        return false;
-    }
-    return true;
-}
-
-bool Database::removeSoftwareFromComputer(int id_comp, int id_soft)
-{
-    if (!Database::db.isOpen()) {
-        lastError = "Нет подключения к базе данных";
-        return false;
-    }
-
-    QSqlQuery query(Database::db);
-    query.prepare("DELETE FROM computer_software WHERE id_comp = ? AND id_soft = ?");
-    query.addBindValue(id_comp);
-    query.addBindValue(id_soft);
-
-    if (!query.exec()) {
-        lastError = query.lastError().text();
-        return false;
-    }
-    return true;
-}
-
-QSqlQuery Database::getEmployeeByUserId(int user_id)
-{
-    QSqlQuery query(Database::db);
-    if (!Database::db.isOpen()) {
-        return query;
-    }
-
-    query.prepare("SELECT id_emp FROM employee WHERE user_id = ?");
-    query.addBindValue(user_id);
-    query.exec();
-    return query;
-}
-
-QSqlQuery Database::getComputerByEmployeeId(int id_emp)
-{
-    QSqlQuery query(Database::db);
-    if (!Database::db.isOpen()) {
-        return query;
-    }
-
-    query.prepare("SELECT id_comp FROM computer WHERE id_emp = ?");
+    query.prepare("SELECT user_id FROM employee WHERE id_emp = ?");
     query.addBindValue(id_emp);
+    query.exec();
+    return query;
+}
+
+QSqlQuery Database::getUserById(int user_id)
+{
+    QSqlQuery query(Database::db);
+    if (!Database::db.isOpen()) {
+        return query;
+    }
+
+    query.prepare("SELECT login, password FROM \"user\" WHERE user_id = ?");
+    query.addBindValue(user_id);
     query.exec();
     return query;
 }

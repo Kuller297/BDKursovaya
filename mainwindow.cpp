@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "database.h"
-#include "userdialog.h"
 #include "employee_dialog.h"
 #include "computer_dialog.h"
 #include "software_dialog.h"
@@ -81,15 +80,9 @@ void MainWindow::setupUserButtons()
     QWidget *buttonWidget = new QWidget();
     QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
 
-    QPushButton *btnAdd = new QPushButton("Добавить");
-    QPushButton *btnEdit = new QPushButton("Редактировать");
-    QPushButton *btnDelete = new QPushButton("Удалить");
     QPushButton *btnRefresh = new QPushButton("Обновить");
     QPushButton *btnSearch = new QPushButton("Поиск");
 
-    buttonLayout->addWidget(btnAdd);
-    buttonLayout->addWidget(btnEdit);
-    buttonLayout->addWidget(btnDelete);
     buttonLayout->addWidget(btnRefresh);
     buttonLayout->addWidget(btnSearch);
     buttonLayout->addStretch();
@@ -99,9 +92,6 @@ void MainWindow::setupUserButtons()
         userLayout->addWidget(buttonWidget);
     }
 
-    connect(btnAdd, &QPushButton::clicked, this, &MainWindow::onAddUser);
-    connect(btnEdit, &QPushButton::clicked, this, &MainWindow::onEditUser);
-    connect(btnDelete, &QPushButton::clicked, this, &MainWindow::onDeleteUser);
     connect(btnRefresh, &QPushButton::clicked, this, &MainWindow::loadUsers);
     connect(btnSearch, &QPushButton::clicked, this, &MainWindow::onSearchUsers);
 }
@@ -333,9 +323,10 @@ void MainWindow::loadUsers()
     while (query.next()) {
         ui->tableUsers->insertRow(row);
         ui->tableUsers->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
-        ui->tableUsers->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
-        ui->tableUsers->setItem(row, 2, new QTableWidgetItem(query.value(2).toString()));
-        ui->tableUsers->setItem(row, 3, new QTableWidgetItem(query.value(3).toString()));
+        ui->tableUsers->setItem(row, 1, new QTableWidgetItem(query.value(4).toString()));
+        ui->tableUsers->setItem(row, 2, new QTableWidgetItem(query.value(1).toString()));
+        ui->tableUsers->setItem(row, 3, new QTableWidgetItem(query.value(2).toString()));
+        ui->tableUsers->setItem(row, 4, new QTableWidgetItem(query.value(3).toString()));
         row++;
     }
 
@@ -425,92 +416,9 @@ void MainWindow::loadLicenses()
     selectedLicId = -1;
 }
 
-void MainWindow::onAddUser()
-{
-    if (currentUserPost != "main_admin") {
-        QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для добавления пользователей!");
-        return;
-    }
-
-    UserDialog dialog(this);
-    dialog.setAddMode();
-
-    if (dialog.exec() == QDialog::Accepted) {
-        if (Database::addUser(dialog.getLogin(), dialog.getPassword(), dialog.getRole())) {
-            QMessageBox::information(this, "Успех", "Пользователь добавлен!");
-            loadUsers();
-        } else {
-            QMessageBox::critical(this, "Ошибка", "Не удалось добавить пользователя!\n" + Database::getLastError());
-        }
-    }
-}
-
-void MainWindow::onEditUser()
-{
-    if (currentUserPost != "main_admin") {
-        QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для редактирования пользователей!");
-        return;
-    }
-
-    if (selectedUserId == -1) {
-        QMessageBox::warning(this, "Ошибка", "Выберите пользователя для редактирования!");
-        return;
-    }
-
-    int row = -1;
-    for (int i = 0; i < ui->tableUsers->rowCount(); i++) {
-        if (ui->tableUsers->item(i, 0)->text().toInt() == selectedUserId) {
-            row = i;
-            break;
-        }
-    }
-
-    if (row == -1) return;
-
-    UserDialog dialog(this);
-    dialog.setEditMode(selectedUserId,
-                       ui->tableUsers->item(row, 1)->text(),
-                       ui->tableUsers->item(row, 2)->text(),
-                       ui->tableUsers->item(row, 3)->text());
-
-    if (dialog.exec() == QDialog::Accepted) {
-        if (Database::updateUser(selectedUserId, dialog.getLogin(), dialog.getPassword(), dialog.getRole())) {
-            QMessageBox::information(this, "Успех", "Пользователь обновлен!");
-            loadUsers();
-        } else {
-            QMessageBox::critical(this, "Ошибка", "Не удалось обновить пользователя!\n" + Database::getLastError());
-        }
-    }
-}
-
-void MainWindow::onDeleteUser()
-{
-    if (currentUserPost != "main_admin") {
-        QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для удаления пользователей!");
-        return;
-    }
-
-    if (selectedUserId == -1) {
-        QMessageBox::warning(this, "Ошибка", "Выберите пользователя для удаления!");
-        return;
-    }
-
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить этого пользователя?", QMessageBox::Yes | QMessageBox::No);
-
-    if (reply == QMessageBox::Yes) {
-        if (Database::deleteUser(selectedUserId)) {
-            QMessageBox::information(this, "Успех", "Пользователь удален!");
-            loadUsers();
-            selectedUserId = -1;
-        } else {
-            QMessageBox::critical(this, "Ошибка", "Не удалось удалить пользователя!\n" + Database::getLastError());
-        }
-    }
-}
-
 void MainWindow::onAddEmployee()
 {
-    if (currentUserPost == "user") {
+    if (currentUserPost != "main_admin") {
         QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для добавления сотрудников!");
         return;
     }
@@ -519,10 +427,8 @@ void MainWindow::onAddEmployee()
     dialog.setAddMode();
 
     if (dialog.exec() == QDialog::Accepted) {
-        if (Database::addEmployee(dialog.getName(), dialog.getSurname(), dialog.getPatronimic(),
-                                  dialog.getPost(), dialog.getTelephone(), dialog.getAdress(),
-                                  dialog.getUserId())) {
-            QMessageBox::information(this, "Успех", "Сотрудник добавлен!");
+        if (Database::addEmployee(dialog.getName(), dialog.getSurname(), dialog.getPatronimic(),dialog.getPost(), dialog.getTelephone(), dialog.getAdress(),dialog.getLogin(), dialog.getPassword(), dialog.getRole())) {
+            QMessageBox::information(this, "Успех", "Сотрудник и учётная запись добавлены!");
             loadEmployees();
         } else {
             QMessageBox::critical(this, "Ошибка", "Не удалось добавить сотрудника!\n" + Database::getLastError());
@@ -532,7 +438,7 @@ void MainWindow::onAddEmployee()
 
 void MainWindow::onEditEmployee()
 {
-    if (currentUserPost == "user") {
+    if (currentUserPost != "main_admin") {
         QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для редактирования сотрудников!");
         return;
     }
@@ -552,21 +458,33 @@ void MainWindow::onEditEmployee()
 
     if (row == -1) return;
 
+    QString name = ui->tableEmployees->item(row, 1)->text();
+    QString surname = ui->tableEmployees->item(row, 2)->text();
+    QString patronimic = ui->tableEmployees->item(row, 3)->text();
+    QString post = ui->tableEmployees->item(row, 4)->text();
+    QString telephone = ui->tableEmployees->item(row, 5)->text();
+    QString adress = ui->tableEmployees->item(row, 6)->text();
+    QString role = ui->tableEmployees->item(row, 7)->text();
+
+    QString login;
+    QString password;
+
+    QSqlQuery query = Database::getEmployeeByUserId(selectedEmpId);
+    if (query.next()) {
+        int userId = query.value(0).toInt();
+        QSqlQuery userQuery = Database::getUserById(userId);
+        if (userQuery.next()) {
+            login = userQuery.value(0).toString();
+            password = userQuery.value(1).toString();
+        }
+    }
+
     EmployeeDialog dialog(this);
-    dialog.setEditMode(selectedEmpId,
-                       ui->tableEmployees->item(row, 1)->text(),
-                       ui->tableEmployees->item(row, 2)->text(),
-                       ui->tableEmployees->item(row, 3)->text(),
-                       ui->tableEmployees->item(row, 4)->text(),
-                       ui->tableEmployees->item(row, 5)->text(),
-                       ui->tableEmployees->item(row, 6)->text(),
-                       ui->tableEmployees->item(row, 7)->text().toInt());
+    dialog.setEditMode(selectedEmpId, name, surname, patronimic, post, telephone, adress, login, password, role);
 
     if (dialog.exec() == QDialog::Accepted) {
-        if (Database::updateEmployee(selectedEmpId, dialog.getName(), dialog.getSurname(), dialog.getPatronimic(),
-                                     dialog.getPost(), dialog.getTelephone(), dialog.getAdress(),
-                                     dialog.getUserId())) {
-            QMessageBox::information(this, "Успех", "Сотрудник обновлен!");
+        if (Database::updateEmployee(selectedEmpId,dialog.getName(), dialog.getSurname(), dialog.getPatronimic(),dialog.getPost(), dialog.getTelephone(), dialog.getAdress(),dialog.getLogin(), dialog.getPassword(), dialog.getRole())) {
+            QMessageBox::information(this, "Успех", "Сотрудник и учётная запись обновлены!");
             loadEmployees();
         } else {
             QMessageBox::critical(this, "Ошибка", "Не удалось обновить сотрудника!\n" + Database::getLastError());
@@ -576,7 +494,7 @@ void MainWindow::onEditEmployee()
 
 void MainWindow::onDeleteEmployee()
 {
-    if (currentUserPost == "user") {
+    if (currentUserPost != "main_admin") {
         QMessageBox::warning(this, "Доступ запрещён", "У вас недостаточно прав для удаления сотрудников!");
         return;
     }
@@ -586,11 +504,13 @@ void MainWindow::onDeleteEmployee()
         return;
     }
 
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Подтверждение", "Вы уверены, что хотите удалить этого сотрудника?", QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Подтверждение",
+                                                              "Вы уверены, что хотите удалить этого сотрудника?\nУчётная запись пользователя также будет удалена.",
+                                                              QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
         if (Database::deleteEmployee(selectedEmpId)) {
-            QMessageBox::information(this, "Успех", "Сотрудник удален!");
+            QMessageBox::information(this, "Успех", "Сотрудник и его учётная запись удалены!");
             loadEmployees();
             selectedEmpId = -1;
         } else {
@@ -644,6 +564,24 @@ void MainWindow::onEditComputer()
     if (row == -1) return;
 
     ComputerDialog dialog(this);
+
+    int id_emp = -1;
+    QString employeeName = ui->tableComputers->item(row, 7)->text();
+    if (employeeName != "Не назначен") {
+        QSqlQuery query = Database::getAllEmployees();
+        while (query.next()) {
+            QString fullName = QString("%1 %2 %3")
+            .arg(query.value(2).toString(),
+                 query.value(1).toString(),
+                 query.value(3).toString())
+                .simplified();
+            if (fullName == employeeName) {
+                id_emp = query.value(0).toInt();
+                break;
+            }
+        }
+    }
+
     dialog.setEditMode(selectedCompId,
                        ui->tableComputers->item(row, 1)->text(),
                        ui->tableComputers->item(row, 2)->text(),
@@ -651,7 +589,7 @@ void MainWindow::onEditComputer()
                        ui->tableComputers->item(row, 4)->text(),
                        ui->tableComputers->item(row, 5)->text(),
                        ui->tableComputers->item(row, 6)->text(),
-                       ui->tableComputers->item(row, 7)->text().toInt());
+                       id_emp, employeeName);
 
     if (dialog.exec() == QDialog::Accepted) {
         if (Database::updateComputer(selectedCompId, dialog.getProcessor(), dialog.getVideoCard(), dialog.getRam(),
@@ -783,7 +721,13 @@ void MainWindow::onAddLicense()
     dialog.setAddMode();
 
     if (dialog.exec() == QDialog::Accepted) {
-        if (Database::addLicense(dialog.getEndDate(), dialog.getIdSoft(), dialog.getKey())) {
+        int softId = dialog.getSoftId();
+        if (softId == -1) {
+            QMessageBox::critical(this, "Ошибка", "Программа не найдена!");
+            return;
+        }
+
+        if (Database::addLicense(dialog.getEndDate(), softId, dialog.getKey())) {
             QMessageBox::information(this, "Успех", "Лицензия добавлена!");
             loadLicenses();
         } else {
@@ -817,11 +761,18 @@ void MainWindow::onEditLicense()
     LicenseDialog dialog(this);
     dialog.setEditMode(selectedLicId,
                        ui->tableLicenses->item(row, 1)->text(),
-                       ui->tableLicenses->item(row, 2)->text().toInt(),
+                       ui->tableLicenses->item(row, 2)->text(),
+                       "", // версию нужно тоже хранить или получать отдельно
                        ui->tableLicenses->item(row, 3)->text());
 
     if (dialog.exec() == QDialog::Accepted) {
-        if (Database::updateLicense(selectedLicId, dialog.getEndDate(), dialog.getIdSoft(), dialog.getKey())) {
+        int softId = dialog.getSoftId();
+        if (softId == -1) {
+            QMessageBox::critical(this, "Ошибка", "Программа не найдена!");
+            return;
+        }
+
+        if (Database::updateLicense(selectedLicId, dialog.getEndDate(), softId, dialog.getKey())) {
             QMessageBox::information(this, "Успех", "Лицензия обновлена!");
             loadLicenses();
         } else {

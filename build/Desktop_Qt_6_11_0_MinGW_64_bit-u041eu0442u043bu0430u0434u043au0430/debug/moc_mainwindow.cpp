@@ -39,11 +39,8 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "MainWindow",
-        "onAddUser",
-        "",
-        "onEditUser",
-        "onDeleteUser",
         "onSearchUsers",
+        "",
         "onAddEmployee",
         "onEditEmployee",
         "onDeleteEmployee",
@@ -63,46 +60,40 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'onAddUser'
-        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onEditUser'
-        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onDeleteUser'
-        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSearchUsers'
-        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onAddEmployee'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onEditEmployee'
-        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onDeleteEmployee'
-        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSearchEmployees'
-        QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onAddComputer'
-        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onEditComputer'
-        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onDeleteComputer'
-        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSearchComputers'
-        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(10, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onAddSoftware'
-        QtMocHelpers::SlotData<void()>(14, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(11, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onEditSoftware'
-        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(12, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onDeleteSoftware'
-        QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(13, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSearchSoftware'
-        QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(14, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onAddLicense'
-        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(15, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onEditLicense'
-        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onDeleteLicense'
-        QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onSearchLicenses'
-        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -126,26 +117,23 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     auto *_t = static_cast<MainWindow *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->onAddUser(); break;
-        case 1: _t->onEditUser(); break;
-        case 2: _t->onDeleteUser(); break;
-        case 3: _t->onSearchUsers(); break;
-        case 4: _t->onAddEmployee(); break;
-        case 5: _t->onEditEmployee(); break;
-        case 6: _t->onDeleteEmployee(); break;
-        case 7: _t->onSearchEmployees(); break;
-        case 8: _t->onAddComputer(); break;
-        case 9: _t->onEditComputer(); break;
-        case 10: _t->onDeleteComputer(); break;
-        case 11: _t->onSearchComputers(); break;
-        case 12: _t->onAddSoftware(); break;
-        case 13: _t->onEditSoftware(); break;
-        case 14: _t->onDeleteSoftware(); break;
-        case 15: _t->onSearchSoftware(); break;
-        case 16: _t->onAddLicense(); break;
-        case 17: _t->onEditLicense(); break;
-        case 18: _t->onDeleteLicense(); break;
-        case 19: _t->onSearchLicenses(); break;
+        case 0: _t->onSearchUsers(); break;
+        case 1: _t->onAddEmployee(); break;
+        case 2: _t->onEditEmployee(); break;
+        case 3: _t->onDeleteEmployee(); break;
+        case 4: _t->onSearchEmployees(); break;
+        case 5: _t->onAddComputer(); break;
+        case 6: _t->onEditComputer(); break;
+        case 7: _t->onDeleteComputer(); break;
+        case 8: _t->onSearchComputers(); break;
+        case 9: _t->onAddSoftware(); break;
+        case 10: _t->onEditSoftware(); break;
+        case 11: _t->onDeleteSoftware(); break;
+        case 12: _t->onSearchSoftware(); break;
+        case 13: _t->onAddLicense(); break;
+        case 14: _t->onEditLicense(); break;
+        case 15: _t->onDeleteLicense(); break;
+        case 16: _t->onSearchLicenses(); break;
         default: ;
         }
     }
@@ -171,14 +159,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 20)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 20;
+        _id -= 17;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 20)
+        if (_id < 17)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 20;
+        _id -= 17;
     }
     return _id;
 }

@@ -35,6 +35,11 @@
           </column>
           <column>
            <property name="text">
+            <string>Фамилия</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Логин</string>
            </property>
           </column>

@@ -1,5 +1,6 @@
 debug/computer_dialog.o
 debug/employee_dialog.o
+debug/employee_search_dialog.o
 debug/license_dialog.o
 debug/main.o
 debug/database.o
@@ -7,12 +8,11 @@ debug/loginwindow.o
 debug/mainwindow.o
 debug/searchdialog.o
 debug/software_dialog.o
-debug/userdialog.o
 debug/moc_computer_dialog.o
 debug/moc_employee_dialog.o
+debug/moc_employee_search_dialog.o
 debug/moc_license_dialog.o
 debug/moc_loginwindow.o
 debug/moc_mainwindow.o
 debug/moc_searchdialog.o
 debug/moc_software_dialog.o
-debug/moc_userdialog.o

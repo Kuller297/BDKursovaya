@@ -38,8 +38,11 @@ public:
     QLineEdit *editKeyboard;
     QLabel *labelMouse;
     QLineEdit *editMouse;
-    QLabel *labelEmpId;
-    QLineEdit *editEmpId;
+    QLabel *labelEmployee;
+    QHBoxLayout *employeeLayout;
+    QLineEdit *editEmployeeFullName;
+    QPushButton *btnSelectEmployee;
+    QPushButton *btnClearEmployee;
     QHBoxLayout *horizontalLayout;
     QPushButton *btnSave;
     QPushButton *btnCancel;
@@ -48,7 +51,7 @@ public:
     {
         if (ComputerDialog->objectName().isEmpty())
             ComputerDialog->setObjectName("ComputerDialog");
-        ComputerDialog->resize(450, 400);
+        ComputerDialog->resize(450, 420);
         verticalLayout = new QVBoxLayout(ComputerDialog);
         verticalLayout->setObjectName("verticalLayout");
         formLayout = new QFormLayout();
@@ -113,15 +116,31 @@ public:
 
         formLayout->setWidget(5, QFormLayout::ItemRole::FieldRole, editMouse);
 
-        labelEmpId = new QLabel(ComputerDialog);
-        labelEmpId->setObjectName("labelEmpId");
+        labelEmployee = new QLabel(ComputerDialog);
+        labelEmployee->setObjectName("labelEmployee");
 
-        formLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, labelEmpId);
+        formLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, labelEmployee);
 
-        editEmpId = new QLineEdit(ComputerDialog);
-        editEmpId->setObjectName("editEmpId");
+        employeeLayout = new QHBoxLayout();
+        employeeLayout->setObjectName("employeeLayout");
+        editEmployeeFullName = new QLineEdit(ComputerDialog);
+        editEmployeeFullName->setObjectName("editEmployeeFullName");
+        editEmployeeFullName->setReadOnly(true);
 
-        formLayout->setWidget(6, QFormLayout::ItemRole::FieldRole, editEmpId);
+        employeeLayout->addWidget(editEmployeeFullName);
+
+        btnSelectEmployee = new QPushButton(ComputerDialog);
+        btnSelectEmployee->setObjectName("btnSelectEmployee");
+
+        employeeLayout->addWidget(btnSelectEmployee);
+
+        btnClearEmployee = new QPushButton(ComputerDialog);
+        btnClearEmployee->setObjectName("btnClearEmployee");
+
+        employeeLayout->addWidget(btnClearEmployee);
+
+
+        formLayout->setLayout(6, QFormLayout::ItemRole::FieldRole, employeeLayout);
 
 
         verticalLayout->addLayout(formLayout);
@@ -156,7 +175,10 @@ public:
         labelScreen->setText(QCoreApplication::translate("ComputerDialog", "\320\255\320\272\321\200\320\260\320\275:", nullptr));
         labelKeyboard->setText(QCoreApplication::translate("ComputerDialog", "\320\232\320\273\320\260\320\262\320\270\320\260\321\202\321\203\321\200\320\260:", nullptr));
         labelMouse->setText(QCoreApplication::translate("ComputerDialog", "\320\234\321\213\321\210\321\214:", nullptr));
-        labelEmpId->setText(QCoreApplication::translate("ComputerDialog", "ID \321\201\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272\320\260:", nullptr));
+        labelEmployee->setText(QCoreApplication::translate("ComputerDialog", "\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272:", nullptr));
+        editEmployeeFullName->setPlaceholderText(QCoreApplication::translate("ComputerDialog", "\320\241\320\276\321\202\321\200\321\203\320\264\320\275\320\270\320\272 \320\275\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
+        btnSelectEmployee->setText(QCoreApplication::translate("ComputerDialog", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214", nullptr));
+        btnClearEmployee->setText(QCoreApplication::translate("ComputerDialog", "\320\236\321\207\320\270\321\201\321\202\320\270\321\202\321\214", nullptr));
         btnSave->setText(QCoreApplication::translate("ComputerDialog", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         btnCancel->setText(QCoreApplication::translate("ComputerDialog", "\320\236\321\202\320\274\320\265\320\275\320\260", nullptr));
     } // retranslateUi
